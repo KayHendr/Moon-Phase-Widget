@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Moon Phase Widget</title>
+
+  <!-- Force dark mode -->
+  <meta name="color-scheme" content="dark">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      color: #eaeaea;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .container {
+      padding: 16px 20px;
+      background: rgba(20, 20, 24, 0.85);
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .moon {
+      font-size: 48px;
+      margin-bottom: 6px;
+    }
+
+    .phase {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .date {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="moon" id="moonEmoji">🌑</div>
+    <div class="phase" id="moonPhase">New Moon</div>
+    <div class="date" id="today"></div>
+  </div>
+
+  <script>
+    function getMoonPhase(date) {
+      const synodicMonth = 29.530588853;
+      const knownNewMoon = new Date("2000-01-06T18:14:00Z");
+      const daysSince =
+        (date - knownNewMoon) / (1000 * 60 * 60 * 24);
+      const phase = daysSince % synodicMonth;
+
+      if (phase < 1.84566) return ["🌑", "New Moon"];
+      if (phase < 5.53699) return ["🌒", "Waxing Crescent"];
+      if (phase < 9.22831) return ["🌓", "First Quarter"];
+      if (phase < 12.91963) return ["🌔", "Waxing Gibbous"];
+      if (phase < 16.61096) return ["🌕", "Full Moon"];
+      if (phase < 20.30228) return ["🌖", "Waning Gibbous"];
+      if (phase < 23.99361) return ["🌗", "Last Quarter"];
+      if (phase < 27.68493) return ["🌘", "Waning Crescent"];
+      return ["🌑", "New Moon"];
+    }
+
+    const today = new Date();
+    const [emoji, phaseName] = getMoonPhase(today);
+
+    document.getElementById("moonEmoji").textContent = emoji;
+    document.getElementById("moonPhase").textContent = phaseName;
+    document.getElementById("today").textContent =
+      today.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      });
+  </script>
+</body>
+</html>
+
